@@ -15,7 +15,7 @@ function paramsFromReq(req) {
 exports.index = function(req, res) {
 	var params = paramsFromReq(req);
 	var markup = React.renderToString(App({
-		title: 'Home',
+		title: 'SlothJoy | Chores Done Right',
 		params: params
 	}));
 	res.send('<!DOCTYPE html>' + markup);

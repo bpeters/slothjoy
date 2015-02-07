@@ -1,0 +1,150 @@
+#props  {
+	display: none;
+}
+
+body {
+	background: deepskyblue;
+}
+
+.do {
+	background: tomato;
+}
+
+.done {
+	background: deepskyblue;
+}
+
+.flex-page {
+	padding: 0;
+	margin: auto;
+	list-style: none;
+	
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	
+	-webkit-flex-flow: column;
+	justify-content: center;
+}
+
+.flex-column {
+	padding: 0;
+	margin: auto;
+	list-style: none;
+	padding-bottom: 20px;
+
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	
+	-webkit-flex-flow: column;
+	justify-content: center;
+}
+
+.flex-row {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	
+	-webkit-flex-flow: row;
+	justify-content: center;
+}
+
+.flex-title {
+	background: tomato;
+	height: 60px;
+	width: 100%;
+	line-height: 60px;
+	color: white;
+	font-weight: bold;
+	font-size: 3em;
+	text-align: center;
+}
+
+.flex-body {
+	height: 100%;
+	width: 100%;
+}
+
+.frequency-title {
+	font-family: Helvetica Neue;
+	font-size: 24px;
+	font-style: normal;
+	font-weight: 700;
+	height: 24px;
+	letter-spacing: 4px;
+	line-height: 1em;
+	opacity: 1;
+	text-align: center;
+}
+
+.chore-card {
+	background: white;
+	height: 60px;
+	width: 80%;
+	margin: auto;
+	margin-top: 20px;
+}
+
+.navigation {
+	list-style: none;
+	margin: 0; 
+	
+	background: deepskyblue;
+	
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	
+	-webkit-flex-flow: row wrap;
+	justify-content: flex-end;
+}
+
+.navigation a {
+	text-decoration: none;
+	display: block;
+	padding: 1em;
+	color: white;
+}
+
+.navigation a:hover {
+	background: darken(deepskyblue, 2%);
+	cursor: pointer;
+}
+
+@media all and (max-width: 800px) {
+	.navigation {
+		justify-content: space-around;
+	}
+}
+
+@media all and (max-width: 600px) {
+	.navigation {
+		-webkit-flex-flow: column wrap;
+		flex-flow: column wrap;
+		padding: 0;
+	}
+
+	.navigation a { 
+		text-align: center; 
+		padding: 10px;
+		border-top: 1px solid rgba(255,255,255,0.3); 
+		border-bottom: 1px solid rgba(0,0,0,0.1); 
+	}
+
+	.navigation li:last-of-type a {
+		border-bottom: none;
+	}
+}

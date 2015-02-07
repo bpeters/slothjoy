@@ -20063,8 +20063,83 @@ module.exports = React.createClass({
 	},
 	render: function() {
 		return (
-			React.createElement("div", null, 
-				"Main"
+			React.createElement("div", {className: "flex-page"}, 
+				React.createElement("ul", {className: "navigation"}, 
+					React.createElement("li", null, React.createElement("a", null, "Home")), 
+					React.createElement("li", null, React.createElement("a", null, "Account"))
+				), 
+				React.createElement("div", {className: "flex-row"}, 
+					React.createElement("div", {className: "flex-title"}, 
+						React.createElement("span", {className: "frequency-title"}, "BRENNEN")
+					), 
+					React.createElement("div", {className: "flex-title"}, 
+						React.createElement("span", {className: "frequency-title"}, "ROB")
+					)
+				), 
+				React.createElement("div", {className: "flex-row"}, 
+					React.createElement("div", {className: "flex-title"}, "10"), 
+					React.createElement("div", {className: "flex-title"}, "8")
+				), 
+				React.createElement("div", {className: "flex-row"}, 
+					React.createElement("div", {className: "flex-title"}, 
+						React.createElement("span", {className: "frequency-title"}, "DAILY")
+					), 
+					React.createElement("div", {className: "flex-title"}, 
+						React.createElement("span", {className: "frequency-title"}, "WEEKLY")
+					), 
+					React.createElement("div", {className: "flex-title"}, 
+						React.createElement("span", {className: "frequency-title"}, "MONTHLY")
+					), 
+					React.createElement("div", {className: "flex-title"}, 
+						React.createElement("span", {className: "frequency-title"}, "YEARLY")
+					)
+				), 
+				React.createElement("div", {className: "flex-row"}, 
+					React.createElement("div", {className: "flex-title"}, "1"), 
+					React.createElement("div", {className: "flex-title"}, "2"), 
+					React.createElement("div", {className: "flex-title"}, "3"), 
+					React.createElement("div", {className: "flex-title"}, "4")
+				), 
+				React.createElement("div", {className: "flex-row"}, 
+					React.createElement("div", {className: "flex-body"}, 
+						React.createElement("div", {className: "flex-column do"}, 
+							React.createElement("div", {className: "chore-card"}), 
+							React.createElement("div", {className: "chore-card"}), 
+							React.createElement("div", {className: "chore-card"}), 
+							React.createElement("div", {className: "chore-card"})
+						), 
+						React.createElement("div", {className: "flex-column done"}, 
+							React.createElement("div", {className: "chore-card"})
+						)
+					), 
+					React.createElement("div", {className: "flex-body"}, 
+						React.createElement("div", {className: "flex-column do"}, 
+							React.createElement("div", {className: "chore-card"}), 
+							React.createElement("div", {className: "chore-card"}), 
+							React.createElement("div", {className: "chore-card"})
+						), 
+						React.createElement("div", {className: "flex-column done"}, 
+							React.createElement("div", {className: "chore-card"})
+						)
+					), 
+					React.createElement("div", {className: "flex-body"}, 
+						React.createElement("div", {className: "flex-column do"}, 
+							React.createElement("div", {className: "chore-card"}), 
+							React.createElement("div", {className: "chore-card"})
+						), 
+						React.createElement("div", {className: "flex-column done"}, 
+							React.createElement("div", {className: "chore-card"})
+						)
+					), 
+					React.createElement("div", {className: "flex-body"}, 
+						React.createElement("div", {className: "flex-column do"}, 
+							React.createElement("div", {className: "chore-card"})
+						), 
+						React.createElement("div", {className: "flex-column done"}, 
+							React.createElement("div", {className: "chore-card"})
+						)
+					)
+				)
 			)
 		)
 	}
