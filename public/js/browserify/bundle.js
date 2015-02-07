@@ -33501,52 +33501,6 @@ module.exports = React.createClass({
 				), 
 				React.createElement("div", {className: "flex-row"}, 
 					rotations
-				), 
-				React.createElement("div", {className: "flex-row"}, 
-					React.createElement("div", {className: "flex-title"}, "1"), 
-					React.createElement("div", {className: "flex-title"}, "2"), 
-					React.createElement("div", {className: "flex-title"}, "3"), 
-					React.createElement("div", {className: "flex-title"}, "4")
-				), 
-				React.createElement("div", {className: "flex-row"}, 
-					React.createElement("div", {className: "flex-body"}, 
-						React.createElement("div", {className: "flex-column do"}, 
-							React.createElement("div", {className: "chore-card"}), 
-							React.createElement("div", {className: "chore-card"}), 
-							React.createElement("div", {className: "chore-card"}), 
-							React.createElement("div", {className: "chore-card"})
-						), 
-						React.createElement("div", {className: "flex-column done"}, 
-							React.createElement("div", {className: "chore-card"})
-						)
-					), 
-					React.createElement("div", {className: "flex-body"}, 
-						React.createElement("div", {className: "flex-column do"}, 
-							React.createElement("div", {className: "chore-card"}), 
-							React.createElement("div", {className: "chore-card"}), 
-							React.createElement("div", {className: "chore-card"})
-						), 
-						React.createElement("div", {className: "flex-column done"}, 
-							React.createElement("div", {className: "chore-card"})
-						)
-					), 
-					React.createElement("div", {className: "flex-body"}, 
-						React.createElement("div", {className: "flex-column do"}, 
-							React.createElement("div", {className: "chore-card"}), 
-							React.createElement("div", {className: "chore-card"})
-						), 
-						React.createElement("div", {className: "flex-column done"}, 
-							React.createElement("div", {className: "chore-card"})
-						)
-					), 
-					React.createElement("div", {className: "flex-body"}, 
-						React.createElement("div", {className: "flex-column do"}, 
-							React.createElement("div", {className: "chore-card"})
-						), 
-						React.createElement("div", {className: "flex-column done"}, 
-							React.createElement("div", {className: "chore-card"})
-						)
-					)
 				)
 			)
 		)
@@ -33563,8 +33517,21 @@ module.exports = React.createClass({
 	},
 	render: function() {
 		return (
-			React.createElement("div", {className: "flex-title"}, 
-				React.createElement("span", {className: "frequency-title"}, this.props.rotation.name)
+			React.createElement("div", {className: "flex-column"}, 
+				React.createElement("div", {className: "flex-title"}, 
+					React.createElement("span", {className: "frequency-title"}, this.props.rotation.name)
+				), 
+				React.createElement("div", {className: "flex-body"}, 
+					React.createElement("div", {className: "flex-column do"}, 
+						React.createElement("div", {className: "chore-card"}), 
+						React.createElement("div", {className: "chore-card"}), 
+						React.createElement("div", {className: "chore-card"}), 
+						React.createElement("div", {className: "chore-card"})
+					), 
+					React.createElement("div", {className: "flex-column done"}, 
+						React.createElement("div", {className: "chore-card"})
+					)
+				)
 			)
 		)
 	}

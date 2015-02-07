@@ -26,6 +26,7 @@ body {
   padding: 0;
   margin: auto;
   list-style: none;
+  width: 100%;
   padding-bottom: 20px;
   display: -webkit-box;
   display: -moz-box;
@@ -96,6 +97,11 @@ body {
   display: block;
   padding: 1em;
   color: white;
+  font-family: Helvetica Neue;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 4px;
 }
 .navigation a:hover {
   background: #00b7f5;
