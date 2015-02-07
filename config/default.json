@@ -1,0 +1,7 @@
+{
+	// Parse configs use local.json
+	"Parse": {
+		"key": "",
+		"secret": ""
+	}
+}
