@@ -70,6 +70,7 @@ exports.rotations2chores = function (callback) {
 					rotation_id: rotation2chore.get('rotation_id'),
 					chore_id: rotation2chore.get('chore_id'),
 					current_points: rotation2chore.get('current_points'),
+					completed: rotation2chore.get('completed'),
 					next_reset_dt: rotation2chore.get('next_reset_dt')
 				});
 			});
