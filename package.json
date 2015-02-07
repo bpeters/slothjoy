@@ -1,39 +1,42 @@
 {
-  "name": "slothjoy",
-  "version": "1.0.0",
-  "description": "A better way to do chores.",
-  "main": "app.js",
-  "dependencies": {
-    "config": "^1.10.0",
-    "express": "^4.11.2",
-    "lodash": "^3.1.0",
-    "node-jsx": "^0.12.4",
-    "parse": "^1.3.4",
-    "q": "^1.1.2",
-    "react": "^0.12.2",
-    "reflux": "^0.2.5",
-    "swig": "^1.4.2"
-  },
-  "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-browserify": "^3.3.0",
-    "grunt-contrib-less": "^1.0.0",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-nodemon": "^0.4.0",
-    "grunt-react": "^0.10.0",
-    "react-tools": "^0.12.2"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/bpeters/slothjoy.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/bpeters/slothjoy/issues"
-  },
-  "homepage": "https://github.com/bpeters/slothjoy"
+	"name": "slothjoy",
+	"version": "1.0.0",
+	"description": "A better way to do chores.",
+	"main": "app.js",
+	"engines": {
+		"node": "0.10.x"
+	},
+	"dependencies": {
+		"config": "^1.10.0",
+		"express": "^4.11.2",
+		"lodash": "^3.1.0",
+		"node-jsx": "^0.12.4",
+		"parse": "^1.3.4",
+		"q": "^1.1.2",
+		"react": "^0.12.2",
+		"reflux": "^0.2.5",
+		"swig": "^1.4.2"
+	},
+	"devDependencies": {
+		"grunt": "^0.4.5",
+		"grunt-browserify": "^3.3.0",
+		"grunt-contrib-less": "^1.0.0",
+		"grunt-contrib-watch": "^0.6.1",
+		"grunt-nodemon": "^0.4.0",
+		"grunt-react": "^0.10.0",
+		"react-tools": "^0.12.2"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/bpeters/slothjoy.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/bpeters/slothjoy/issues"
+	},
+	"homepage": "https://github.com/bpeters/slothjoy"
 }
