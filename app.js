@@ -15,6 +15,9 @@ swig.setDefaults({ cache: false });
 //public routes
 app.get('/', routes.index);
 
+//api routes
+app.get('/api/1/rotations', routes.api.rotations);
+
 var port = Number(process.env.PORT || 5000);
 app.listen(port, function() {
 	console.log("Listening on " + port);

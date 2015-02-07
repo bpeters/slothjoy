@@ -20,3 +20,5 @@ exports.index = function(req, res) {
 	}));
 	res.send('<!DOCTYPE html>' + markup);
 };
+
+exports.api = require('./api');
