@@ -12,7 +12,6 @@ function paramsFromReq(req) {
 exports.chores = function(req, res, next) {
 	var params = paramsFromReq(req);
 	model.chores(function(error, results) {
-		console.log(results);
 		if (error) {
 			return next(error);
 		} else {
@@ -24,7 +23,6 @@ exports.chores = function(req, res, next) {
 exports.board = function(req, res, next) {
 	var params = paramsFromReq(req);
 	model.board(params.id, function(error, results) {
-		console.log(results);
 		if (error) {
 			return next(error);
 		} else {
@@ -36,7 +34,6 @@ exports.board = function(req, res, next) {
 exports.users = function(req, res, next) {
 	var params = paramsFromReq(req);
 	model.users(params.id, function(error, results) {
-		console.log(results);
 		if (error) {
 			return next(error);
 		} else {
@@ -49,7 +46,6 @@ exports.createBoard = function(req, res, next) {
 	var params = paramsFromReq(req);
 	var id = Math.random().toString(36).slice(2);
 	model.createBoard(id, function(error, results) {
-		console.log(results);
 		if (error) {
 			return next(error);
 		} else {
@@ -61,7 +57,17 @@ exports.createBoard = function(req, res, next) {
 exports.addUser = function(req, res, next) {
 	var params = paramsFromReq(req);
 	model.addUser(params.id, params.body.username, function(error, results) {
-		console.log(results);
+		if (error) {
+			return next(error);
+		} else {
+			res.json(results);
+		}
+	});
+};
+
+exports.updateChore = function(req, res, next) {
+	var params = paramsFromReq(req);
+	model.updateChore(params.id, params.body.chore, function(error, results) {
 		if (error) {
 			return next(error);
 		} else {

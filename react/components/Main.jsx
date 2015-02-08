@@ -52,14 +52,23 @@ module.exports = React.createClass({
 		});
 	},
 	render: function() {
+		var self = this;
+		var colors = [
+			'#64BD8C',
+			'#FFD628',
+			'#E2B72E',
+			'#FE584D',
+			'#E954C3',
+			'#37BFEF'
+		];
 		var users = _.map(this.state.users, function(user, i) {
 			return (
-				<User key={user.userId} user={user}/>
+				<User key={user.userId} user={user} color={colors[i]}/>
 			);
 		});
 		var rotations = _.map(this.state.chores, function(rotation, i) {
 			return (
-				<Rotation key={rotation.rotationId} rotation={rotation}/>
+				<Rotation key={rotation.rotationId} rotation={rotation} params={self.props.params}/>
 			);
 		});
 		if (this.props.params.id) {
@@ -81,41 +90,47 @@ module.exports = React.createClass({
 			)
 		} else {
 			return (
-					<div className='flex-page'>
-						<div className='navigation'>
-							<div className='logo'><a>SlothJoy</a></div>
-						</div>
-						<div className='start-container'>
-							<div className='start-child'>
-								<div>Hey there! Welcome to</div>
-								<div>SlothJoy!</div>
-								<div className='create-btn' onClick={this.createBoard}>Create Chore Board</div>
-							</div>
-						</div>
-						<div className='flex-row demo'>
-							<div className='flex-title'>
-								<span className='frequency-title'>BILLY</span>
-							</div>
-							<div className='flex-title'>
-								<span className='frequency-title'>RAY</span>
-							</div>
-							<div className='flex-title'>
-								<span className='frequency-title'>BOBBY</span>
-							</div>
-							<div className='flex-title'>
-								<span className='frequency-title'>LISA</span>
-							</div>
-						</div>
-						<div className='flex-row demo'>
-							<div className='flex-title'>102</div>
-							<div className='flex-title'>96</div>
-							<div className='flex-title'>84</div>
-							<div className='flex-title'>121</div>
-						</div>
-						<div className='flex-row demo'>
-							{rotations}
+				<div className='flex-page'>
+					<div className='navigation'>
+						<div className='logo'><a>SlothJoy</a></div>
+					</div>
+					<div className='start-container'>
+						<div className='start-child'>
+							<div>Hey there! Welcome to</div>
+							<div>SlothJoy!</div>
+							<div className='create-btn' onClick={this.createBoard}>Create Chore Board</div>
 						</div>
 					</div>
+					<div className='flex-row demo'>
+						<div className='flex-body' style={{backgroundColor: '#64BD8C'}}>
+							<div className='flex-title'>
+								<span className='frequency-title'>John</span>
+							</div>
+							<div className='flex-title'>
+								<span className='frequency-title'>102</span>
+							</div>
+						</div>
+						<div className='flex-body' style={{backgroundColor: '#FFD628'}}>
+							<div className='flex-title'>
+								<span className='frequency-title'>Lisa</span>
+							</div>
+							<div className='flex-title'>
+								<span className='frequency-title'>128</span>
+							</div>
+						</div>
+						<div className='flex-body' style={{backgroundColor: '#E2B72E'}}>
+							<div className='flex-title'>
+								<span className='frequency-title'>Hunter</span>
+							</div>
+							<div className='flex-title'>
+								<span className='frequency-title'>84</span>
+							</div>
+						</div>
+					</div>
+					<div className='flex-row demo'>
+						{rotations}
+					</div>
+				</div>
 				)
 		}
 	}

@@ -51,13 +51,11 @@ body {
   margin-left: 25%;
   margin-right: 25%;
 }
-.create-btn:hover,
-.add-user:hover {
+.create-btn:hover {
   cursor: pointer;
   background: #ff4d2d;
 }
-.create-btn:active,
-.add-user:active {
+.create-btn:active {
   border-color: #e6e6e6;
   color: #e6e6e6;
   background-color: #ff3814;
@@ -73,6 +71,7 @@ body {
   display: flex;
   -webkit-flex-flow: column;
   justify-content: center;
+  margin-bottom: 60px;
 }
 .flex-column {
   margin-top: 0px;
@@ -100,7 +99,6 @@ body {
   -webkit-flex-flow: row;
 }
 .flex-title {
-  background: deepskyblue;
   height: 60px;
   width: 100%;
   line-height: 60px;
@@ -112,6 +110,9 @@ body {
 .flex-body {
   height: 100%;
   width: 100%;
+}
+.rotation {
+  margin-top: 40px;
 }
 .frequency-title {
   font-family: Helvetica Neue;
@@ -145,12 +146,26 @@ body {
   border-bottom: 3px solid white;
   background-color: deepskyblue;
 }
+.chore-card-default {
+  height: 60px;
+  opacity: 0.1;
+  width: 80%;
+  margin: auto;
+  margin-top: 10%;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: row;
+  justify-content: center;
+}
 .chore-card {
   background: white;
   height: 60px;
   width: 80%;
   margin: auto;
-  margin-top: 20px;
+  margin-top: 10%;
   display: -webkit-box;
   display: -moz-box;
   display: -ms-flexbox;
@@ -174,7 +189,7 @@ body {
   width: 40px;
   margin: 10px;
   line-height: 60px;
-  background-color: orange;
+  background-color: deepskyblue;
 }
 .chore-text {
   font-family: Helvetica Neue;

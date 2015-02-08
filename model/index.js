@@ -20,7 +20,8 @@ exports.chores = function (callback) {
 					rotation: chore.get('rotation'),
 					choreId: chore.get('chore_id'),
 					chore: chore.get('chore'),
-					chorePoints: chore.get('points')
+					chorePoints: chore.get('points'),
+					choreCompleted: chore.get('chore_completed')
 				});
 			});
 			if (chores) {
@@ -181,6 +182,32 @@ exports.addUser = function (id, username, callback) {
 		error: function(error) {
 			console.log("Error: " + error.code + " " + error.message);
 			return callback(error);
+		}
+	});
+};
+
+exports.updateChore = function (id, chore, callback) {
+	var query = new Parse.Query(Board);
+	query.equalTo("board_id", id);
+	query.equalTo("chore_id", chore.choreId);
+	query.first({
+		success: function(board) {
+			board.set('rotation_id', chore.rotationId);
+			board.set('rotation', chore.rotation);
+			board.set('chore_completed', chore.choreCompleted);
+			board.save(null, {
+				success: function(board) {
+					return callback(null, board);
+				},
+				error: function(error) {
+					console.log("Error: " + error.code + " " + error.message);
+					return callback(error);
+				}
+			});
+		},
+		error: function(error) {
+			console.log("Error: " + error.code + " " + error.message);
+			return callback(error, null);
 		}
 	});
 };

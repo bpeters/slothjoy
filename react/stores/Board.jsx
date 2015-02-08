@@ -44,6 +44,19 @@ module.exports = Reflux.createStore({
 				}
 			});
 	},
+	updateChore: function(id, chore, callback) {
+		var self = this;
+		request
+			.post('/api/1/update_chore/' + id)
+			.send({chore: chore})
+			.end(function(error, results){
+				if (error) {
+					self.onLoadError(error);
+				} else {
+					self.getBoard(id);
+				}
+			});
+	},
 	onLoadSuccess: function(board) {
 		this._board = board;
 		this.trigger(this._board);

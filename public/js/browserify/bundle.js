@@ -36154,18 +36154,12 @@ var Reflux = require('reflux');
 
 module.exports = Reflux.createActions([
 	"createBoard",
-  "getBoard",
-  "getDefaultBoard"
+	"getBoard",
+	"getDefaultBoard",
+	"updateChore"
 ]);
 
 },{"reflux":223}],249:[function(require,module,exports){
-var Reflux = require('reflux');
-
-module.exports = Reflux.createActions([
-	"getChores"
-]);
-
-},{"reflux":223}],250:[function(require,module,exports){
 var Reflux = require('reflux');
 
 module.exports = Reflux.createActions([
@@ -36173,7 +36167,7 @@ module.exports = Reflux.createActions([
 	"addUser"
 ]);
 
-},{"reflux":223}],251:[function(require,module,exports){
+},{"reflux":223}],250:[function(require,module,exports){
 var React = require('react');
 var ItemTypes = require('./ItemTypes.jsx');
 var DragDropMixin = require('react-dnd').DragDropMixin;
@@ -36225,7 +36219,89 @@ module.exports = React.createClass({
 	}
 });
 
-},{"./ItemTypes.jsx":252,"react":222,"react-dnd":11}],252:[function(require,module,exports){
+},{"./ItemTypes.jsx":252,"react":222,"react-dnd":11}],251:[function(require,module,exports){
+var React = require('react/addons');
+var _ = require('lodash');
+var Chore = require('./Chore.jsx');
+var BoardActions = require('../actions/Board.jsx');
+var ItemTypes = require('./ItemTypes.jsx');
+var DragDropMixin = require('react-dnd').DragDropMixin;
+
+module.exports = React.createClass({
+	displayName: 'ChoreContainer',
+	mixins: [DragDropMixin],
+	propTypes: {
+		chores: React.PropTypes.array,
+		choreCompleted: React.PropTypes.bool,
+		rotation: React.PropTypes.object,
+		params: React.PropTypes.object
+	},
+	getInitialState: function() {
+		return {
+			droppedItem: null,
+			chores: this.props.chores
+		};
+	},
+	configureDragDrop: function(registerType) {
+		var dropTarget = {
+			acceptDrop: function(item) {
+				var chores = this.state.chores;
+				var inChores = false;
+				item.chore.choreCompleted = this.props.choreCompleted;
+				item.chore.rotationId = this.props.rotation.rotationId;
+				item.chore.rotation = this.props.rotation.rotation;
+				for (var i = 0; i < chores.length; i++) {
+					if (item.chore.choreId === chores[i].choreId) {
+						inChores = true;
+					}
+				}
+				if (!inChores) {
+					chores.push(item.chore);
+					this.setState({
+						chores: chores
+					});
+				}
+				BoardActions.updateChore(this.props.params.id, item.chore);
+			}
+		};
+		registerType(ItemTypes.CHORE, {
+			dropTarget: dropTarget
+		});
+	},
+	render: function() {
+		var types = [ItemTypes.CHORE];
+		var dropStates = types.map(this.getDropState);
+		var opacity;
+		if (dropStates.some(function(s) {
+			return s.isHovering;
+		})) {
+			opacity = 0.8;
+		} else if (dropStates.some(function(s) {
+			return s.isDragging;
+		})) {
+			opacity = 0.5;
+		}
+		var self = this;
+		var choreClass = this.props.choreCompleted ? 'done' : 'do';
+		var chores = _.map(this.state.chores, function(chore, i) {
+			if (chore.choreCompleted === self.props.choreCompleted) {
+				return (
+					React.createElement(Chore, {key: i, chore: chore})
+				);
+			}
+		});
+		return (
+			React.createElement("div", React.__spread({className: 'flex-column ' + choreClass},  this.dropTargetFor.apply(this, types), {style: {opacity: opacity ? opacity : 1}}), 
+				 chores.length ? null : React.createElement("div", {className: "chore-card-default"}, 
+					React.createElement("div", {className: "chore-text"}, this.props.choreCompleted ? 'Complete Chores' : 'Incomplete Chores')
+				), 
+				chores
+			)
+		)
+	}
+});
+
+},{"../actions/Board.jsx":248,"./Chore.jsx":250,"./ItemTypes.jsx":252,"lodash":3,"react-dnd":11,"react/addons":61}],252:[function(require,module,exports){
 module.exports = {
 	CHORE: 'chore',
 	USER: 'user'
@@ -36286,14 +36362,23 @@ module.exports = React.createClass({
 		});
 	},
 	render: function() {
+		var self = this;
+		var colors = [
+			'#64BD8C',
+			'#FFD628',
+			'#E2B72E',
+			'#FE584D',
+			'#E954C3',
+			'#37BFEF'
+		];
 		var users = _.map(this.state.users, function(user, i) {
 			return (
-				React.createElement(User, {key: user.userId, user: user})
+				React.createElement(User, {key: user.userId, user: user, color: colors[i]})
 			);
 		});
 		var rotations = _.map(this.state.chores, function(rotation, i) {
 			return (
-				React.createElement(Rotation, {key: rotation.rotationId, rotation: rotation})
+				React.createElement(Rotation, {key: rotation.rotationId, rotation: rotation, params: self.props.params})
 			);
 		});
 		if (this.props.params.id) {
@@ -36315,117 +36400,79 @@ module.exports = React.createClass({
 			)
 		} else {
 			return (
-					React.createElement("div", {className: "flex-page"}, 
-						React.createElement("div", {className: "navigation"}, 
-							React.createElement("div", {className: "logo"}, React.createElement("a", null, "SlothJoy"))
-						), 
-						React.createElement("div", {className: "start-container"}, 
-							React.createElement("div", {className: "start-child"}, 
-								React.createElement("div", null, "Hey there! Welcome to"), 
-								React.createElement("div", null, "SlothJoy!"), 
-								React.createElement("div", {className: "create-btn", onClick: this.createBoard}, "Create Chore Board")
-							)
-						), 
-						React.createElement("div", {className: "flex-row demo"}, 
-							React.createElement("div", {className: "flex-title"}, 
-								React.createElement("span", {className: "frequency-title"}, "BILLY")
-							), 
-							React.createElement("div", {className: "flex-title"}, 
-								React.createElement("span", {className: "frequency-title"}, "RAY")
-							), 
-							React.createElement("div", {className: "flex-title"}, 
-								React.createElement("span", {className: "frequency-title"}, "BOBBY")
-							), 
-							React.createElement("div", {className: "flex-title"}, 
-								React.createElement("span", {className: "frequency-title"}, "LISA")
-							)
-						), 
-						React.createElement("div", {className: "flex-row demo"}, 
-							React.createElement("div", {className: "flex-title"}, "102"), 
-							React.createElement("div", {className: "flex-title"}, "96"), 
-							React.createElement("div", {className: "flex-title"}, "84"), 
-							React.createElement("div", {className: "flex-title"}, "121")
-						), 
-						React.createElement("div", {className: "flex-row demo"}, 
-							rotations
+				React.createElement("div", {className: "flex-page"}, 
+					React.createElement("div", {className: "navigation"}, 
+						React.createElement("div", {className: "logo"}, React.createElement("a", null, "SlothJoy"))
+					), 
+					React.createElement("div", {className: "start-container"}, 
+						React.createElement("div", {className: "start-child"}, 
+							React.createElement("div", null, "Hey there! Welcome to"), 
+							React.createElement("div", null, "SlothJoy!"), 
+							React.createElement("div", {className: "create-btn", onClick: this.createBoard}, "Create Chore Board")
 						)
+					), 
+					React.createElement("div", {className: "flex-row demo"}, 
+						React.createElement("div", {className: "flex-body", style: {backgroundColor: '#64BD8C'}}, 
+							React.createElement("div", {className: "flex-title"}, 
+								React.createElement("span", {className: "frequency-title"}, "John")
+							), 
+							React.createElement("div", {className: "flex-title"}, 
+								React.createElement("span", {className: "frequency-title"}, "102")
+							)
+						), 
+						React.createElement("div", {className: "flex-body", style: {backgroundColor: '#FFD628'}}, 
+							React.createElement("div", {className: "flex-title"}, 
+								React.createElement("span", {className: "frequency-title"}, "Lisa")
+							), 
+							React.createElement("div", {className: "flex-title"}, 
+								React.createElement("span", {className: "frequency-title"}, "128")
+							)
+						), 
+						React.createElement("div", {className: "flex-body", style: {backgroundColor: '#E2B72E'}}, 
+							React.createElement("div", {className: "flex-title"}, 
+								React.createElement("span", {className: "frequency-title"}, "Hunter")
+							), 
+							React.createElement("div", {className: "flex-title"}, 
+								React.createElement("span", {className: "frequency-title"}, "84")
+							)
+						)
+					), 
+					React.createElement("div", {className: "flex-row demo"}, 
+						rotations
 					)
+				)
 				)
 		}
 	}
 });
 
-},{"../actions/Board.jsx":248,"../actions/User.jsx":250,"../stores/Board.jsx":256,"../stores/User.jsx":258,"./Rotation.jsx":254,"./User.jsx":255,"lodash":3,"react/addons":61}],254:[function(require,module,exports){
+},{"../actions/Board.jsx":248,"../actions/User.jsx":249,"../stores/Board.jsx":256,"../stores/User.jsx":257,"./Rotation.jsx":254,"./User.jsx":255,"lodash":3,"react/addons":61}],254:[function(require,module,exports){
 var React = require('react/addons');
 var _ = require('lodash');
-var Chore = require('./Chore.jsx');
-var ItemTypes = require('./ItemTypes.jsx');
-var DragDropMixin = require('react-dnd').DragDropMixin;
+var ChoreContainer = require('./ChoreContainer.jsx');
 
 module.exports = React.createClass({
 	displayName: 'Rotation',
-	mixins: [DragDropMixin],
 	propTypes: {
-		rotation: React.PropTypes.object
-	},
-	getInitialState: function() {
-		return {
-			droppedItem: null,
-			chores: this.props.rotation.chores
-		};
-	},
-	configureDragDrop: function(registerType) {
-		var dropTarget = {
-			acceptDrop: function(item) {
-				var chores = this.state.chores;
-				chores.push(item.chore);
-				this.setState({
-					chores: chores
-				});
-			}
-		};
-		registerType(ItemTypes.CHORE, {
-			dropTarget: dropTarget
-		});
+		rotation: React.PropTypes.object,
+		params: React.PropTypes.object
 	},
 	render: function() {
-		var types = [ItemTypes.CHORE];
-		var dropStates = types.map(this.getDropState);
-		var opacity;
-
-		if (dropStates.some(function(s) {
-			return s.isHovering;
-		})) {
-			opacity = 0.8;
-		} else if (dropStates.some(function(s) {
-			return s.isDragging;
-		})) {
-			opacity = 0.5;
-		}
-
-		var chores = _.map(this.state.chores, function(chore, i) {
-			return (
-				React.createElement(Chore, {key: i, chore: chore})
-			);
-		});
 		return (
-			React.createElement("div", {className: "flex-body"}, 
+			React.createElement("div", {className: "flex-body rotation"}, 
 				React.createElement("div", {className: "flex-title"}, 
 					React.createElement("span", {className: "frequency-title"}, this.props.rotation.rotation)
 				), 
 				React.createElement("div", {className: "flex-body"}, 
-					React.createElement("div", React.__spread({className: "flex-column do"},  this.dropTargetFor.apply(this, types), {style: {opacity: opacity ? opacity : 1}}), 
-						chores
-					), 
-					React.createElement("div", React.__spread({className: "flex-column done"},  this.dropTargetFor.apply(this, types), {style: {opacity: opacity ? opacity : 1}})
-					)
+					React.createElement(ChoreContainer, {rotation: this.props.rotation, chores: this.props.rotation.chores, choreCompleted: false, params: this.props.params}), 
+					React.createElement(ChoreContainer, {rotation: this.props.rotation, chores: this.props.rotation.chores, choreCompleted: true, params: this.props.params})
 				)
 			)
 		)
 	}
 });
 
-},{"./Chore.jsx":251,"./ItemTypes.jsx":252,"lodash":3,"react-dnd":11,"react/addons":61}],255:[function(require,module,exports){
+},{"./ChoreContainer.jsx":251,"lodash":3,"react/addons":61}],255:[function(require,module,exports){
 var React = require('react');
 var ItemTypes = require('./ItemTypes.jsx');
 var UserActions = require('../actions/User.jsx');
@@ -36436,7 +36483,8 @@ module.exports = React.createClass({
 	mixins: [DragDropMixin],
 	propTypes: {
 		user: React.PropTypes.object,
-		params: React.PropTypes.object
+		params: React.PropTypes.object,
+		color: React.PropTypes.string
 	},
 	getInitialState: function() {
 		return {
@@ -36479,7 +36527,7 @@ module.exports = React.createClass({
 		var opacity = isDragging ? 1 : 1;
 		if (this.props.user) {
 			return (
-				React.createElement("div", {className: "flex-body"}, 
+				React.createElement("div", {className: "flex-body", style: {backgroundColor: this.props.color}}, 
 					React.createElement("div", React.__spread({className: "flex-title"},  this.dragSourceFor(type)), 
 						React.createElement("span", {className: "frequency-title"}, this.props.user.userName)
 					), 
@@ -36504,7 +36552,7 @@ module.exports = React.createClass({
 	}
 });
 
-},{"../actions/User.jsx":250,"./ItemTypes.jsx":252,"react":222,"react-dnd":11}],256:[function(require,module,exports){
+},{"../actions/User.jsx":249,"./ItemTypes.jsx":252,"react":222,"react-dnd":11}],256:[function(require,module,exports){
 var BoardActions = require('../actions/Board.jsx');
 var Reflux = require('reflux');
 var _ = require('lodash');
@@ -36551,6 +36599,19 @@ module.exports = Reflux.createStore({
 				}
 			});
 	},
+	updateChore: function(id, chore, callback) {
+		var self = this;
+		request
+			.post('/api/1/update_chore/' + id)
+			.send({chore: chore})
+			.end(function(error, results){
+				if (error) {
+					self.onLoadError(error);
+				} else {
+					self.getBoard(id);
+				}
+			});
+	},
 	onLoadSuccess: function(board) {
 		this._board = board;
 		this.trigger(this._board);
@@ -36564,41 +36625,6 @@ module.exports = Reflux.createStore({
 });
 
 },{"../actions/Board.jsx":248,"lodash":3,"reflux":223,"superagent":243}],257:[function(require,module,exports){
-var ChoreActions = require('../actions/Chore.jsx');
-var Reflux = require('reflux');
-var _ = require('lodash');
-var request = require('superagent');
-
-module.exports = Reflux.createStore({
-	listenables: ChoreActions,
-	init: function() {
-		this._chores = [];
-	},
-	getChores: function() {
-		var self = this;
-		request
-			.get('/api/1/chores/')
-			.end(function(error, results){
-				if (error) {
-					self.onLoadError(error);
-				} else {
-					self.onLoadSuccess(results.body);
-				}
-			});
-	},
-	onLoadSuccess: function(chores) {
-		this._chores = chores;
-		this.trigger(this._chores);
-	},
-	onLoadError: function(error) {
-		this.trigger(this._chores);
-	},
-	getDefaultData: function() {
-		return this._chores;
-	}
-});
-
-},{"../actions/Chore.jsx":249,"lodash":3,"reflux":223,"superagent":243}],258:[function(require,module,exports){
 var UserActions = require('../actions/User.jsx');
 var Reflux = require('reflux');
 var _ = require('lodash');
@@ -36646,4 +36672,4 @@ module.exports = Reflux.createStore({
 	}
 });
 
-},{"../actions/User.jsx":250,"lodash":3,"reflux":223,"superagent":243}]},{},[246,247,248,249,250,251,252,253,254,255,256,257,258]);
+},{"../actions/User.jsx":249,"lodash":3,"reflux":223,"superagent":243}]},{},[246,247,248,249,250,251,252,253,254,255,256,257]);

@@ -29,6 +29,7 @@ app.get('/api/1/board/:id', routes.api.board);
 app.get('/api/1/users/:id', routes.api.users);
 app.post('/api/1/create_board', routes.api.createBoard);
 app.post('/api/1/add_user/:id', routes.api.addUser);
+app.post('/api/1/update_chore/:id', routes.api.updateChore);
 
 var port = Number(process.env.PORT || 5000);
 app.listen(port, function() {

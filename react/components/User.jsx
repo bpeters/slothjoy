@@ -8,7 +8,8 @@ module.exports = React.createClass({
 	mixins: [DragDropMixin],
 	propTypes: {
 		user: React.PropTypes.object,
-		params: React.PropTypes.object
+		params: React.PropTypes.object,
+		color: React.PropTypes.string
 	},
 	getInitialState: function() {
 		return {
@@ -51,7 +52,7 @@ module.exports = React.createClass({
 		var opacity = isDragging ? 1 : 1;
 		if (this.props.user) {
 			return (
-				<div className='flex-body'>
+				<div className='flex-body' style={{backgroundColor: this.props.color}}>
 					<div className='flex-title' {...this.dragSourceFor(type)}>
 						<span className='frequency-title'>{this.props.user.userName}</span>
 					</div>
