@@ -1,10 +1,10 @@
-var RotationActions = require('../actions/Rotation.jsx');
+var ChoreActions = require('../actions/Chore.jsx');
 var Reflux = require('reflux');
 var _ = require('lodash');
 var request = require('superagent');
 
 module.exports = Reflux.createStore({
-	listenables: RotationActions,
+	listenables: ChoreActions,
 	init: function() {
 		this._chores = [];
 	},

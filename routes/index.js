@@ -15,7 +15,16 @@ function paramsFromReq(req) {
 exports.index = function(req, res) {
 	var params = paramsFromReq(req);
 	var markup = React.renderToString(App({
-		title: 'SlothJoy | Chores Done Right',
+		title: 'SlothJoy',
+		params: params
+	}));
+	res.send('<!DOCTYPE html>' + markup);
+};
+
+exports.board = function(req, res) {
+	var params = paramsFromReq(req);
+	var markup = React.renderToString(App({
+		title: 'Your Board | SlothJoy',
 		params: params
 	}));
 	res.send('<!DOCTYPE html>' + markup);

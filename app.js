@@ -14,10 +14,12 @@ swig.setDefaults({ cache: false });
 
 //public routes
 app.get('/', routes.index);
+app.get('/:id', routes.board);
 
 //api routes
-app.get('/api/1/rotations', routes.api.rotations);
 app.get('/api/1/chores', routes.api.chores);
+app.get('/api/1/board/:id', routes.api.board);
+app.post('/api/1/create_board', routes.api.createBoard);
 
 var port = Number(process.env.PORT || 5000);
 app.listen(port, function() {

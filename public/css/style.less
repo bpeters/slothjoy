@@ -9,10 +9,61 @@ body {
 
 .do {
 	background: tomato;
+	min-height: 120px;
 }
 
 .done {
-	background: deepskyblue;
+	background: limegreen;
+	min-height: 120px;
+}
+
+.demo {
+	opacity: 0.1;
+}
+
+.start-container {
+	position:fixed;
+	z-index: 100;
+	top:40%;
+	left:50%;
+	margin:-200px 0 0 -200px;
+	width:500px;
+	height:400px;
+}
+.start-child {
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-flow: column;
+	padding: 0;
+	margin: auto;
+	justify-content: center;
+	line-height: 60px;
+	color: white;
+	font-weight: bold;
+	font-size: 3em;
+	text-align: center;
+}
+.create-btn {
+	background-color: tomato;
+	border: 3px solid white;
+	border-radius: 8px;
+	font-size: .5em;
+	width: 50%;
+	margin-top:10%;
+	margin-left:25%;
+	margin-right:25%;
+}
+.create-btn:hover {
+	cursor: pointer;
+	background: darken(tomato, 5%);
+}
+.create-btn:active {
+	border-color: darken(white, 10%);
+	color: darken(white, 10%);
+	background-color: darken(tomato, 10%);
 }
 
 .flex-page {
@@ -158,7 +209,7 @@ body {
 	display: flex;
 	
 	-webkit-flex-flow: row wrap;
-	justify-content: flex-end;
+	justify-content: flex-start;
 }
 
 .navigation a {

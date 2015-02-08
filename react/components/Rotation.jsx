@@ -59,8 +59,7 @@ module.exports = React.createClass({
 					<div className='flex-column do' {...this.dropTargetFor.apply(this, types)} style={{opacity: opacity ? opacity : 1 }} >
 						{chores}
 					</div>
-					<div className='flex-column done'>
-						<div className='chore-card'></div>
+					<div className='flex-column done' {...this.dropTargetFor.apply(this, types)} style={{opacity: opacity ? opacity : 1 }}>
 					</div>
 				</div>
 			</div>

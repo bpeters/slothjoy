@@ -43,7 +43,7 @@ module.exports = React.createClass({
 			<div className='chore-card' {...this.dragSourceFor(type)} style={{display: display, opacity: opacity}}>
 				<div className='chore-owner'></div>
 				<div className='chore-text'>{this.props.chore.chore}</div>
-				<div className='chore-points'>{this.props.chore.points}</div>
+				<div className='chore-points'>{this.props.chore.chorePoints}</div>
 			</div>
 		);
 	}

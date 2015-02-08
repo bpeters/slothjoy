@@ -36135,7 +36135,7 @@ module.exports = React.createClass({
 	}
 });
 
-},{"./components/Main.jsx":251,"react/addons":61}],247:[function(require,module,exports){
+},{"./components/Main.jsx":252,"react/addons":61}],247:[function(require,module,exports){
 var React = require('react/addons');
 var App = require('./App.jsx');
 var App = React.createFactory(App);
@@ -36153,10 +36153,19 @@ if (typeof window !== 'undefined') {
 var Reflux = require('reflux');
 
 module.exports = Reflux.createActions([
-	"getChores"
+	"createBoard",
+  "getBoard",
+  "getDefaultBoard"
 ]);
 
 },{"reflux":223}],249:[function(require,module,exports){
+var Reflux = require('reflux');
+
+module.exports = Reflux.createActions([
+	"getChores"
+]);
+
+},{"reflux":223}],250:[function(require,module,exports){
 var React = require('react');
 var ItemTypes = require('./ItemTypes.jsx');
 var DragDropMixin = require('react-dnd').DragDropMixin;
@@ -36202,22 +36211,22 @@ module.exports = React.createClass({
 			React.createElement("div", React.__spread({className: "chore-card"},  this.dragSourceFor(type), {style: {display: display, opacity: opacity}}), 
 				React.createElement("div", {className: "chore-owner"}), 
 				React.createElement("div", {className: "chore-text"}, this.props.chore.chore), 
-				React.createElement("div", {className: "chore-points"}, this.props.chore.points)
+				React.createElement("div", {className: "chore-points"}, this.props.chore.chorePoints)
 			)
 		);
 	}
 });
 
-},{"./ItemTypes.jsx":250,"react":222,"react-dnd":11}],250:[function(require,module,exports){
+},{"./ItemTypes.jsx":251,"react":222,"react-dnd":11}],251:[function(require,module,exports){
 module.exports = {
 	CHORE: 'chore'
 };
 
-},{}],251:[function(require,module,exports){
+},{}],252:[function(require,module,exports){
 var React = require('react/addons');
 var Rotation = require('./Rotation.jsx');
-var RotationStore = require('../stores/Rotation.jsx');
-var RotationActions = require('../actions/Rotation.jsx');
+var BoardStore = require('../stores/Board.jsx');
+var BoardActions = require('../actions/Board.jsx');
 var _ = require('lodash');
 
 module.exports = React.createClass({
@@ -36231,8 +36240,12 @@ module.exports = React.createClass({
 		};
 	},
 	componentDidMount: function() {
-		this.unsubscribe = RotationStore.listen(this.updateChores);
-		RotationActions.getChores();
+		this.unsubscribe = BoardStore.listen(this.updateChores);
+		if (this.props.params.id) {
+			BoardActions.getBoard(this.props.params.id);
+		} else {
+			BoardActions.getDefaultBoard();
+		}
 	},
 	componentWillUnmount: function() {
 		this.unsubscribe();
@@ -36242,36 +36255,86 @@ module.exports = React.createClass({
 			chores: chores
 		});
 	},
+	createBoard: function() {
+		BoardStore.createBoard(function(error, res) {
+			if (error) {
+				console.log(error);
+			} else {
+				window.location.replace(window.location + '' + res)
+			}
+		});
+	},
 	render: function() {
 		var rotations = _.map(this.state.chores, function(rotation, i) {
 			return (
 				React.createElement(Rotation, {key: rotation.rotationId, rotation: rotation})
 			);
 		});
-		return (
-			React.createElement("div", {className: "flex-page"}, 
-				React.createElement("ul", {className: "navigation"}, 
-					React.createElement("li", null, React.createElement("a", null, "Chores")), 
-					React.createElement("li", null, React.createElement("a", null, "Feed")), 
-					React.createElement("li", null, React.createElement("a", null, "Account"))
-				), 
-				React.createElement("div", {className: "flex-row"}, 
-					React.createElement("div", {className: "flex-title"}, 
-						React.createElement("span", {className: "frequency-title"}, "BRENNEN")
+		if (this.props.params.id) {
+			return (
+				React.createElement("div", {className: "flex-page"}, 
+					React.createElement("div", {className: "navigation"}, 
+						React.createElement("div", null, React.createElement("a", null, "SlothJoy")), 
+						React.createElement("div", null, React.createElement("a", null, "Chores")), 
+						React.createElement("div", null, React.createElement("a", null, "Feed")), 
+						React.createElement("div", null, React.createElement("a", null, "Account"))
+					), 
+					React.createElement("div", {className: "flex-row"}, 
+						React.createElement("div", {className: "flex-title"}, 
+							React.createElement("span", {className: "frequency-title"}, "BRENNEN")
+						)
+					), 
+					React.createElement("div", {className: "flex-row"}, 
+						React.createElement("div", {className: "flex-title"}, "10")
+					), 
+					React.createElement("div", {className: "flex-row"}, 
+						rotations
 					)
-				), 
-				React.createElement("div", {className: "flex-row"}, 
-					React.createElement("div", {className: "flex-title"}, "10")
-				), 
-				React.createElement("div", {className: "flex-row"}, 
-					rotations
 				)
 			)
-		)
+		} else {
+			return (
+					React.createElement("div", {className: "flex-page"}, 
+						React.createElement("div", {className: "navigation"}, 
+							React.createElement("div", {className: "logo"}, React.createElement("a", null, "SlothJoy"))
+						), 
+						React.createElement("div", {className: "start-container"}, 
+							React.createElement("div", {className: "start-child"}, 
+								React.createElement("div", null, "Hey there! Welcome to"), 
+								React.createElement("div", null, "SlothJoy!"), 
+								React.createElement("div", {className: "create-btn", onClick: this.createBoard}, "Create Chore Board")
+							)
+						), 
+						React.createElement("div", {className: "flex-row demo"}, 
+							React.createElement("div", {className: "flex-title"}, 
+								React.createElement("span", {className: "frequency-title"}, "BILLY")
+							), 
+							React.createElement("div", {className: "flex-title"}, 
+								React.createElement("span", {className: "frequency-title"}, "RAY")
+							), 
+							React.createElement("div", {className: "flex-title"}, 
+								React.createElement("span", {className: "frequency-title"}, "BOBBY")
+							), 
+							React.createElement("div", {className: "flex-title"}, 
+								React.createElement("span", {className: "frequency-title"}, "LISA")
+							)
+						), 
+						React.createElement("div", {className: "flex-row demo"}, 
+							React.createElement("div", {className: "flex-title"}, "102"), 
+							React.createElement("div", {className: "flex-title"}, "96"), 
+							React.createElement("div", {className: "flex-title"}, "84"), 
+							React.createElement("div", {className: "flex-title"}, "121")
+						), 
+						React.createElement("div", {className: "flex-row demo"}, 
+							rotations
+						)
+					)
+				)
+		}
 	}
 });
 
-},{"../actions/Rotation.jsx":248,"../stores/Rotation.jsx":253,"./Rotation.jsx":252,"lodash":3,"react/addons":61}],252:[function(require,module,exports){
+},{"../actions/Board.jsx":248,"../stores/Board.jsx":254,"./Rotation.jsx":253,"lodash":3,"react/addons":61}],253:[function(require,module,exports){
 var React = require('react/addons');
 var _ = require('lodash');
 var Chore = require('./Chore.jsx');
@@ -36333,8 +36396,7 @@ module.exports = React.createClass({
 					React.createElement("div", React.__spread({className: "flex-column do"},  this.dropTargetFor.apply(this, types), {style: {opacity: opacity ? opacity : 1}}), 
 						chores
 					), 
-					React.createElement("div", {className: "flex-column done"}, 
-						React.createElement("div", {className: "chore-card"})
+					React.createElement("div", React.__spread({className: "flex-column done"},  this.dropTargetFor.apply(this, types), {style: {opacity: opacity ? opacity : 1}})
 					)
 				)
 			)
@@ -36342,14 +36404,73 @@ module.exports = React.createClass({
 	}
 });
 
-},{"./Chore.jsx":249,"./ItemTypes.jsx":250,"lodash":3,"react-dnd":11,"react/addons":61}],253:[function(require,module,exports){
-var RotationActions = require('../actions/Rotation.jsx');
+},{"./Chore.jsx":250,"./ItemTypes.jsx":251,"lodash":3,"react-dnd":11,"react/addons":61}],254:[function(require,module,exports){
+var BoardActions = require('../actions/Board.jsx');
 var Reflux = require('reflux');
 var _ = require('lodash');
 var request = require('superagent');
 
 module.exports = Reflux.createStore({
-	listenables: RotationActions,
+	listenables: BoardActions,
+	init: function() {
+		this._board = [];
+	},
+	createBoard: function(callback) {
+		var self = this;
+		request
+			.post('/api/1/create_board')
+			.end(function(error, results){
+				if (error) {
+					return callback(error);
+				} else {
+					return callback(null, results.body);
+				}
+			});
+	},
+	getBoard: function(id, callback) {
+		var self = this;
+		request
+			.get('/api/1/board/' + id)
+			.end(function(error, results){
+				if (error) {
+					self.onLoadError(error);
+				} else {
+					self.onLoadSuccess(results.body);
+				}
+			});
+	},
+	getDefaultBoard: function(callback) {
+		var self = this;
+		request
+			.get('/api/1/chores/')
+			.end(function(error, results){
+				if (error) {
+					self.onLoadError(error);
+				} else {
+					self.onLoadSuccess(results.body);
+				}
+			});
+	},
+	onLoadSuccess: function(board) {
+		this._board = board;
+		this.trigger(this._board);
+	},
+	onLoadError: function(error) {
+		this.trigger(this._board);
+	},
+	getDefaultData: function() {
+		return this._board;
+	}
+});
+
+},{"../actions/Board.jsx":248,"lodash":3,"reflux":223,"superagent":243}],255:[function(require,module,exports){
+var ChoreActions = require('../actions/Chore.jsx');
+var Reflux = require('reflux');
+var _ = require('lodash');
+var request = require('superagent');
+
+module.exports = Reflux.createStore({
+	listenables: ChoreActions,
 	init: function() {
 		this._chores = [];
 	},
@@ -36377,4 +36498,4 @@ module.exports = Reflux.createStore({
 	}
 });
 
-},{"../actions/Rotation.jsx":248,"lodash":3,"reflux":223,"superagent":243}]},{},[246,247,248,249,250,251,252,253]);
+},{"../actions/Chore.jsx":249,"lodash":3,"reflux":223,"superagent":243}]},{},[246,247,248,249,250,251,252,253,254,255]);
