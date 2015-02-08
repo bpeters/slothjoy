@@ -56,11 +56,11 @@ body {
 	margin-left:25%;
 	margin-right:25%;
 }
-.create-btn:hover {
+.create-btn:hover, .add-user:hover {
 	cursor: pointer;
 	background: darken(tomato, 5%);
 }
-.create-btn:active {
+.create-btn:active, .add-user:active {
 	border-color: darken(white, 10%);
 	color: darken(white, 10%);
 	background-color: darken(tomato, 10%);
@@ -139,6 +139,31 @@ body {
 	line-height: 1em;
 	opacity: 1;
 	text-align: center;
+}
+
+.add-user:hover{
+	cursor:pointer;
+	color: darken(white, 10%);
+}
+
+.add-user:active{
+	color: darken(white, 20%);
+}
+
+
+.name-input {
+	outline: none;
+	max-width: 200px;
+	height: 40px;
+	font-family: Helvetica Neue;
+	font-size: 24px;
+	font-style: normal;
+	font-weight: 700;
+	padding-left: 10px;
+	line-height: 40px;
+	border: none;
+	border-bottom: 3px solid white;
+	background-color: deepskyblue;
 }
 
 .chore-card {

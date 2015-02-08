@@ -1,3 +1,4 @@
 module.exports = {
-	CHORE: 'chore'
+	CHORE: 'chore',
+	USER: 'user'
 };

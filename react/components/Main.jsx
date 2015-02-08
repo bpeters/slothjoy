@@ -1,7 +1,10 @@
 var React = require('react/addons');
 var Rotation = require('./Rotation.jsx');
+var User = require('./User.jsx');
 var BoardStore = require('../stores/Board.jsx');
 var BoardActions = require('../actions/Board.jsx');
+var UserStore = require('../stores/User.jsx');
+var UserActions = require('../actions/User.jsx');
 var _ = require('lodash');
 
 module.exports = React.createClass({
@@ -11,23 +14,32 @@ module.exports = React.createClass({
 	},
 	getInitialState: function () {
 		return {
-			chores: []
+			chores: [],
+			users: []
 		};
 	},
 	componentDidMount: function() {
-		this.unsubscribe = BoardStore.listen(this.updateChores);
+		this.unsubscribeBoard = BoardStore.listen(this.updateChores);
+		this.unsubscribeUser = UserStore.listen(this.updateUsers);
 		if (this.props.params.id) {
 			BoardActions.getBoard(this.props.params.id);
+			UserActions.getUsers(this.props.params.id);
 		} else {
 			BoardActions.getDefaultBoard();
 		}
 	},
 	componentWillUnmount: function() {
-		this.unsubscribe();
+		this.unsubscribeBoard();
+		this.unsubscribeUser();
 	},
 	updateChores: function(chores) {
 		this.setState({
 			chores: chores
+		});
+	},
+	updateUsers: function(users) {
+		this.setState({
+			users: users
 		});
 	},
 	createBoard: function() {
@@ -35,11 +47,16 @@ module.exports = React.createClass({
 			if (error) {
 				console.log(error);
 			} else {
-				window.location.replace(window.location + '' + res)
+				window.location.replace(window.location + '' + res);
 			}
 		});
 	},
 	render: function() {
+		var users = _.map(this.state.users, function(user, i) {
+			return (
+				<User key={user.userId} user={user}/>
+			);
+		});
 		var rotations = _.map(this.state.chores, function(rotation, i) {
 			return (
 				<Rotation key={rotation.rotationId} rotation={rotation}/>
@@ -52,15 +69,10 @@ module.exports = React.createClass({
 						<div><a>SlothJoy</a></div>
 						<div><a>Chores</a></div>
 						<div><a>Feed</a></div>
-						<div><a>Account</a></div>
 					</div>
 					<div className='flex-row'>
-						<div className='flex-title'>
-							<span className='frequency-title'>BRENNEN</span>
-						</div>
-					</div>
-					<div className='flex-row'>
-						<div className='flex-title'>10</div>
+						<User params={this.props.params} />
+						{users}
 					</div>
 					<div className='flex-row'>
 						{rotations}

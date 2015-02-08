@@ -36135,7 +36135,7 @@ module.exports = React.createClass({
 	}
 });
 
-},{"./components/Main.jsx":252,"react/addons":61}],247:[function(require,module,exports){
+},{"./components/Main.jsx":253,"react/addons":61}],247:[function(require,module,exports){
 var React = require('react/addons');
 var App = require('./App.jsx');
 var App = React.createFactory(App);
@@ -36166,6 +36166,14 @@ module.exports = Reflux.createActions([
 ]);
 
 },{"reflux":223}],250:[function(require,module,exports){
+var Reflux = require('reflux');
+
+module.exports = Reflux.createActions([
+	"getUsers",
+	"addUser"
+]);
+
+},{"reflux":223}],251:[function(require,module,exports){
 var React = require('react');
 var ItemTypes = require('./ItemTypes.jsx');
 var DragDropMixin = require('react-dnd').DragDropMixin;
@@ -36217,16 +36225,20 @@ module.exports = React.createClass({
 	}
 });
 
-},{"./ItemTypes.jsx":251,"react":222,"react-dnd":11}],251:[function(require,module,exports){
+},{"./ItemTypes.jsx":252,"react":222,"react-dnd":11}],252:[function(require,module,exports){
 module.exports = {
-	CHORE: 'chore'
+	CHORE: 'chore',
+	USER: 'user'
 };
 
-},{}],252:[function(require,module,exports){
+},{}],253:[function(require,module,exports){
 var React = require('react/addons');
 var Rotation = require('./Rotation.jsx');
+var User = require('./User.jsx');
 var BoardStore = require('../stores/Board.jsx');
 var BoardActions = require('../actions/Board.jsx');
+var UserStore = require('../stores/User.jsx');
+var UserActions = require('../actions/User.jsx');
 var _ = require('lodash');
 
 module.exports = React.createClass({
@@ -36236,23 +36248,32 @@ module.exports = React.createClass({
 	},
 	getInitialState: function () {
 		return {
-			chores: []
+			chores: [],
+			users: []
 		};
 	},
 	componentDidMount: function() {
-		this.unsubscribe = BoardStore.listen(this.updateChores);
+		this.unsubscribeBoard = BoardStore.listen(this.updateChores);
+		this.unsubscribeUser = UserStore.listen(this.updateUsers);
 		if (this.props.params.id) {
 			BoardActions.getBoard(this.props.params.id);
+			UserActions.getUsers(this.props.params.id);
 		} else {
 			BoardActions.getDefaultBoard();
 		}
 	},
 	componentWillUnmount: function() {
-		this.unsubscribe();
+		this.unsubscribeBoard();
+		this.unsubscribeUser();
 	},
 	updateChores: function(chores) {
 		this.setState({
 			chores: chores
+		});
+	},
+	updateUsers: function(users) {
+		this.setState({
+			users: users
 		});
 	},
 	createBoard: function() {
@@ -36260,11 +36281,16 @@ module.exports = React.createClass({
 			if (error) {
 				console.log(error);
 			} else {
-				window.location.replace(window.location + '' + res)
+				window.location.replace(window.location + '' + res);
 			}
 		});
 	},
 	render: function() {
+		var users = _.map(this.state.users, function(user, i) {
+			return (
+				React.createElement(User, {key: user.userId, user: user})
+			);
+		});
 		var rotations = _.map(this.state.chores, function(rotation, i) {
 			return (
 				React.createElement(Rotation, {key: rotation.rotationId, rotation: rotation})
@@ -36276,16 +36302,11 @@ module.exports = React.createClass({
 					React.createElement("div", {className: "navigation"}, 
 						React.createElement("div", null, React.createElement("a", null, "SlothJoy")), 
 						React.createElement("div", null, React.createElement("a", null, "Chores")), 
-						React.createElement("div", null, React.createElement("a", null, "Feed")), 
-						React.createElement("div", null, React.createElement("a", null, "Account"))
+						React.createElement("div", null, React.createElement("a", null, "Feed"))
 					), 
 					React.createElement("div", {className: "flex-row"}, 
-						React.createElement("div", {className: "flex-title"}, 
-							React.createElement("span", {className: "frequency-title"}, "BRENNEN")
-						)
-					), 
-					React.createElement("div", {className: "flex-row"}, 
-						React.createElement("div", {className: "flex-title"}, "10")
+						React.createElement(User, {params: this.props.params}), 
+						users
 					), 
 					React.createElement("div", {className: "flex-row"}, 
 						rotations
@@ -36334,7 +36355,7 @@ module.exports = React.createClass({
 	}
 });
 
-},{"../actions/Board.jsx":248,"../stores/Board.jsx":254,"./Rotation.jsx":253,"lodash":3,"react/addons":61}],253:[function(require,module,exports){
+},{"../actions/Board.jsx":248,"../actions/User.jsx":250,"../stores/Board.jsx":256,"../stores/User.jsx":258,"./Rotation.jsx":254,"./User.jsx":255,"lodash":3,"react/addons":61}],254:[function(require,module,exports){
 var React = require('react/addons');
 var _ = require('lodash');
 var Chore = require('./Chore.jsx');
@@ -36404,7 +36425,86 @@ module.exports = React.createClass({
 	}
 });
 
-},{"./Chore.jsx":250,"./ItemTypes.jsx":251,"lodash":3,"react-dnd":11,"react/addons":61}],254:[function(require,module,exports){
+},{"./Chore.jsx":251,"./ItemTypes.jsx":252,"lodash":3,"react-dnd":11,"react/addons":61}],255:[function(require,module,exports){
+var React = require('react');
+var ItemTypes = require('./ItemTypes.jsx');
+var UserActions = require('../actions/User.jsx');
+var DragDropMixin = require('react-dnd').DragDropMixin;
+
+module.exports = React.createClass({
+	displayName: 'User',
+	mixins: [DragDropMixin],
+	propTypes: {
+		user: React.PropTypes.object,
+		params: React.PropTypes.object
+	},
+	getInitialState: function() {
+		return {
+			hasDropped: false,
+			value: null
+		};
+	},
+	handleChange: function(event) {
+		this.setState({value: event.target.value});
+	},
+	addUser: function() {
+		UserActions.addUser(this.props.params.id, this.state.value);
+		this.setState({value: null});
+	},
+	configureDragDrop: function(registerType) {
+		registerType(ItemTypes.USER, {
+			dragSource: {
+				beginDrag: function() {
+					return {
+						item: {
+							user: this.props.user,
+						}
+					};
+				},
+				endDrag: function(didDrop) {
+					if (didDrop) {
+						this.setState({
+							hasDropped: true
+						});
+					}
+				}
+			}
+		});
+	},
+	render: function() {
+		var type = ItemTypes.USER;
+		var hasDropped = this.state.hasDropped;
+		var isDragging = this.getDragState(type).isDragging;
+		var display = hasDropped ? 'none' : 'flex';
+		var opacity = isDragging ? 1 : 1;
+		if (this.props.user) {
+			return (
+				React.createElement("div", {className: "flex-body"}, 
+					React.createElement("div", React.__spread({className: "flex-title"},  this.dragSourceFor(type)), 
+						React.createElement("span", {className: "frequency-title"}, this.props.user.userName)
+					), 
+					React.createElement("div", {className: "flex-title"}, 
+						React.createElement("span", {className: "frequency-title"}, this.props.user.userPoints)
+					)
+				)
+			);
+		} else {
+			return (
+				React.createElement("div", {className: "flex-body"}, 
+					React.createElement("div", {className: "flex-title"}, 
+						React.createElement("input", {className: "name-input", type: "text", value: this.state.value, onChange: this.handleChange}), 
+						React.createElement("div", {className: "add-user", onClick: this.addUser}, React.createElement("i", {className: "fa fa-plus-square"}))
+					), 
+					React.createElement("div", {className: "flex-title"}
+
+					)
+				)
+			);
+		}
+	}
+});
+
+},{"../actions/User.jsx":250,"./ItemTypes.jsx":252,"react":222,"react-dnd":11}],256:[function(require,module,exports){
 var BoardActions = require('../actions/Board.jsx');
 var Reflux = require('reflux');
 var _ = require('lodash');
@@ -36463,7 +36563,7 @@ module.exports = Reflux.createStore({
 	}
 });
 
-},{"../actions/Board.jsx":248,"lodash":3,"reflux":223,"superagent":243}],255:[function(require,module,exports){
+},{"../actions/Board.jsx":248,"lodash":3,"reflux":223,"superagent":243}],257:[function(require,module,exports){
 var ChoreActions = require('../actions/Chore.jsx');
 var Reflux = require('reflux');
 var _ = require('lodash');
@@ -36498,4 +36598,52 @@ module.exports = Reflux.createStore({
 	}
 });
 
-},{"../actions/Chore.jsx":249,"lodash":3,"reflux":223,"superagent":243}]},{},[246,247,248,249,250,251,252,253,254,255]);
+},{"../actions/Chore.jsx":249,"lodash":3,"reflux":223,"superagent":243}],258:[function(require,module,exports){
+var UserActions = require('../actions/User.jsx');
+var Reflux = require('reflux');
+var _ = require('lodash');
+var request = require('superagent');
+
+module.exports = Reflux.createStore({
+	listenables: UserActions,
+	init: function() {
+		this._users = [];
+	},
+	getUsers: function(id) {
+		var self = this;
+		request
+			.get('/api/1/users/' + id)
+			.end(function(error, results){
+				if (error) {
+					self.onLoadError(error);
+				} else {
+					self.onLoadSuccess(results.body);
+				}
+			});
+	},
+	addUser: function(id, username) {
+		var self = this;
+		request
+			.post('/api/1/add_user/' + id)
+			.send({username: username})
+			.end(function(error, results){
+				if (error) {
+					self.onLoadError(error);
+				} else {
+					self.getUsers(id);
+				}
+			});
+	},
+	onLoadSuccess: function(users) {
+		this._users = users;
+		this.trigger(this._users);
+	},
+	onLoadError: function(error) {
+		this.trigger(this._users);
+	},
+	getDefaultData: function() {
+		return this._users;
+	}
+});
+
+},{"../actions/User.jsx":250,"lodash":3,"reflux":223,"superagent":243}]},{},[246,247,248,249,250,251,252,253,254,255,256,257,258]);

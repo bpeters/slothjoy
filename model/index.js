@@ -8,6 +8,7 @@ Parse.initialize(parseApp, parseJavascript);
 
 var Chore = Parse.Object.extend("chore");
 var Board = Parse.Object.extend("board");
+var User = Parse.Object.extend("user");
 
 exports.chores = function (callback) {
 	var query = new Parse.Query(Chore);
@@ -57,9 +58,6 @@ exports.board = function (id, callback) {
 		success: function(results) {
 			var chores = _.map(results, function(chore, i) {
 				return({
-					userId: chore.get('user_id'),
-					userName: chore.get('user_name'),
-					userPoints: chore.get('user_points'),
 					rotationId: chore.get('rotation_id'),
 					rotation: chore.get('rotation'),
 					rotationPoints: chore.get('rotation_points'),
@@ -100,6 +98,33 @@ exports.board = function (id, callback) {
 	});
 };
 
+exports.users = function (id, callback) {
+	var query = new Parse.Query(User);
+	query.equalTo("board_id", id);
+	query.find({
+		success: function(results) {
+			var users = _.map(results, function(user, i) {
+				return({
+					userId: user.get('user_id'),
+					userName: user.get('user_name'),
+					userPoints: user.get('user_points')
+				});
+			});
+			if (users) {
+				console.log("Successfully retrieved " + users.length + " chores.");
+				return callback(null, users);
+			} else {
+				console.log("Not Found");
+				return callback('Not Found', null);
+			}
+		},
+		error: function(error) {
+			console.log("Error: " + error.code + " " + error.message);
+			return callback(error, null);
+		}
+	});
+};
+
 exports.createBoard = function (id, callback) {
 	var query = new Parse.Query(Chore);
 	var boardArray = [];
@@ -110,8 +135,6 @@ exports.createBoard = function (id, callback) {
 				for (var i = 0; i < results.length; i++) {
 					var board = new Board();
 					board.set('board_id', id);
-					board.set('user_id', '1');
-					board.set('user_points', 0);
 					board.set('rotation_id', results[i].get('rotation_id'));
 					board.set('rotation', results[i].get('rotation'));
 					board.set('rotation_points', 0);
@@ -140,6 +163,24 @@ exports.createBoard = function (id, callback) {
 		error: function(error) {
 			console.log("Error: " + error.code + " " + error.message);
 			return callback(error, null);
+		}
+	});
+};
+
+exports.addUser = function (id, username, callback) {
+	var userId = Math.random().toString(36).slice(2);
+	var user = new User();
+	user.set('board_id', id);
+	user.set('user_id', userId);
+	user.set('user_name', username);
+	user.set('user_points', 0);
+	user.save(null, {
+		success: function(user) {
+			return callback(null, user);
+		},
+		error: function(error) {
+			console.log("Error: " + error.code + " " + error.message);
+			return callback(error);
 		}
 	});
 };

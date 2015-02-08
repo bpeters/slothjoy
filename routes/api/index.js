@@ -3,6 +3,7 @@ var model = require('../../model');
 
 function paramsFromReq(req) {
 	var params = _.clone(req.params);
+	params.query = req.query;
 	params.body = req.body;
 	params.user = req.user;
 	return params;
@@ -32,10 +33,34 @@ exports.board = function(req, res, next) {
 	});
 };
 
+exports.users = function(req, res, next) {
+	var params = paramsFromReq(req);
+	model.users(params.id, function(error, results) {
+		console.log(results);
+		if (error) {
+			return next(error);
+		} else {
+			res.json(results);
+		}
+	});
+};
+
 exports.createBoard = function(req, res, next) {
 	var params = paramsFromReq(req);
 	var id = Math.random().toString(36).slice(2);
 	model.createBoard(id, function(error, results) {
+		console.log(results);
+		if (error) {
+			return next(error);
+		} else {
+			res.json(results);
+		}
+	});
+};
+
+exports.addUser = function(req, res, next) {
+	var params = paramsFromReq(req);
+	model.addUser(params.id, params.body.username, function(error, results) {
 		console.log(results);
 		if (error) {
 			return next(error);

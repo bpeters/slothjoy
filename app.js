@@ -12,6 +12,13 @@ app.set('views', __dirname + '/views');
 app.set('view cache', false);
 swig.setDefaults({ cache: false });
 
+var bodyParser = require('body-parser');
+var multer = require('multer');
+
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(multer()); // for parsing multipart/form-data
+
 //public routes
 app.get('/', routes.index);
 app.get('/:id', routes.board);
@@ -19,7 +26,9 @@ app.get('/:id', routes.board);
 //api routes
 app.get('/api/1/chores', routes.api.chores);
 app.get('/api/1/board/:id', routes.api.board);
+app.get('/api/1/users/:id', routes.api.users);
 app.post('/api/1/create_board', routes.api.createBoard);
+app.post('/api/1/add_user/:id', routes.api.addUser);
 
 var port = Number(process.env.PORT || 5000);
 app.listen(port, function() {
