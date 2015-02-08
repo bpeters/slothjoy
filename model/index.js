@@ -10,6 +10,19 @@ var Rotation = Parse.Object.extend("rotation");
 var Chore = Parse.Object.extend("chore");
 var Rotation2Chore = Parse.Object.extend("rotation2chore");
 
+prepareRotation = function (results) {
+		var json = _.chain(results)
+			.groupBy(function(n) {
+				return n.rotationId;
+			})
+			.pairs()
+			.map(function(currentItem) {
+					return _.zipObject(['rotationId','chores'], currentItem);
+			})
+			.value();
+		return json;
+}
+
 exports.chores = function (callback) {
 	var query = new Parse.Query(Chore);
 	query.find({
@@ -67,16 +80,17 @@ exports.rotations2chores = function (callback) {
 		success: function(results) {
 			var rotations2chores = _.map(results, function(rotation2chore, i) {
 				return({
-					rotation_id: rotation2chore.get('rotation_id'),
-					chore_id: rotation2chore.get('chore_id'),
-					current_points: rotation2chore.get('current_points'),
-					completed: rotation2chore.get('completed'),
-					next_reset_dt: rotation2chore.get('next_reset_dt')
+					rotationId: rotation2chore.get('rotation_id'),
+					choreId: rotation2chore.get('chore_id'),
+					chore: rotation2chore.get('chore'),
+					rotation: rotation2chore.get('rotation'),
+					points: rotation2chore.get('points')
 				});
 			});
 			if (rotations2chores) {
 				console.log("Successfully retrieved " + rotations2chores.length + " rotations2chores.");
-				return callback(null, rotations2chores);
+				var jsonRotation = prepareRotation(rotations2chores);
+				return callback(null, jsonRotation);
 			} else {
 				console.log("Not Found");
 				return callback('Not Found', null);
