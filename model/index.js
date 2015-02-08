@@ -29,7 +29,7 @@ exports.chores = function (callback) {
 		success: function(results) {
 			var chores = _.map(results, function(chore, i) {
 				return({
-					chore_id: chore.get('chore_id'),
+					choreId: chore.get('chore_id'),
 					chore: chore.get('chore'),
 					points: chore.get('points')
 				});
@@ -55,7 +55,7 @@ exports.rotations = function (callback) {
 		success: function(results) {
 			var rotations = _.map(results, function(rotation, i) {
 				return({
-					rotation_id: rotation.get('rotation_id'),
+					rotationId: rotation.get('rotation_id'),
 					rotation: rotation.get('rotation')
 				});
 			});
