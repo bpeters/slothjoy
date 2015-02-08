@@ -11,44 +11,41 @@ module.exports = React.createClass({
 	},
 	getInitialState: function () {
 		return {
-			rotations: []
+			chores: []
 		};
 	},
 	componentDidMount: function() {
-		this.unsubscribe = RotationStore.listen(this.updateRotations);
-		RotationActions.getRotations();
+		this.unsubscribe = RotationStore.listen(this.updateChores);
+		RotationActions.getChores();
 	},
 	componentWillUnmount: function() {
 		this.unsubscribe();
 	},
-	updateRotations: function(rotations) {
+	updateChores: function(chores) {
 		this.setState({
-			rotations: rotations
+			chores: chores
 		});
 	},
 	render: function() {
-		var rotations = _.map(this.state.rotations, function(rotation, i) {
+		var rotations = _.map(this.state.chores, function(rotation, i) {
 			return (
-				<Rotation key={rotation.id} rotation={rotation}/>
+				<Rotation key={rotation.rotationId} rotation={rotation}/>
 			);
 		});
 		return (
 			<div className='flex-page'>
 				<ul className='navigation'>
-					<li><a>Home</a></li>
+					<li><a>Chores</a></li>
+					<li><a>Feed</a></li>
 					<li><a>Account</a></li>
 				</ul>
 				<div className='flex-row'>
 					<div className='flex-title'>
 						<span className='frequency-title'>BRENNEN</span>
 					</div>
-					<div className='flex-title'>
-						<span className='frequency-title'>ROB</span>
-					</div>
 				</div>
 				<div className='flex-row'>
 					<div className='flex-title'>10</div>
-					<div className='flex-title'>8</div>
 				</div>
 				<div className='flex-row'>
 					{rotations}

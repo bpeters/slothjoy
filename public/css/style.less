@@ -4,6 +4,7 @@
 
 body {
 	background: deepskyblue;
+	color: #2e2e2e;
 }
 
 .do {
@@ -30,6 +31,7 @@ body {
 }
 
 .flex-column {
+	margin-top: 0px;
 	padding: 0;
 	margin: auto;
 	list-style: none;
@@ -43,7 +45,7 @@ body {
 	display: flex;
 	
 	-webkit-flex-flow: column;
-	justify-content: center;
+
 }
 
 .flex-row {
@@ -58,11 +60,10 @@ body {
 	display: flex;
 	
 	-webkit-flex-flow: row;
-	justify-content: center;
 }
 
 .flex-title {
-	background: tomato;
+	background: deepskyblue;
 	height: 60px;
 	width: 100%;
 	line-height: 60px;
@@ -95,14 +96,60 @@ body {
 	width: 80%;
 	margin: auto;
 	margin-top: 20px;
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	
+	-webkit-flex-flow: row;
+	justify-content: center;
+}
+.chore-card:hover {
+	cursor:pointer;
+	opacity: 0.8;
+}
+.chore-owner {
+	font-family: Helvetica Neue;
+	font-size: 20px;
+	font-style: normal;
+	font-weight: 700;
+	opacity: 1;
+	text-align: center;
+	height: 40px;
+	width: 40px;
+	margin: 10px;
+	line-height: 60px;
+	background-color: orange;
+}
+.chore-text {
+	font-family: Helvetica Neue;
+	font-size: 20px;
+	font-style: normal;
+	font-weight: 700;
+	opacity: 1;
+	text-align: center;
+	height: 60px;
+	width: 100%;
+	line-height: 60px;
+}
+.chore-points {
+	font-family: Helvetica Neue;
+	font-size: 20px;
+	font-style: normal;
+	font-weight: 700;
+	opacity: 1;
+	text-align: center;
+	height: 60px;
+	width: 60px;
+	line-height: 60px;
 }
 
 .navigation {
 	list-style: none;
 	margin: 0;
 
-	
-	background: deepskyblue;
+	background: #f4f4f4;
 	
 	display: -webkit-box;
 	display: -moz-box;
@@ -118,16 +165,15 @@ body {
 	text-decoration: none;
 	display: block;
 	padding: 1em;
-	color: white;
 	font-family: Helvetica Neue;
 	font-size: 18px;
 	font-style: normal;
 	font-weight: 700;
-	letter-spacing: 4px;
+	color: deepskyblue;
 }
 
 .navigation a:hover {
-	background: darken(deepskyblue, 2%);
+	background: darken(#f4f4f4, 2%);
 	cursor: pointer;
 }
 

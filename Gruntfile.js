@@ -13,7 +13,7 @@ module.exports = function(grunt) {
 		},
 		browserify: {
 			options: {
-				transform: [ require('grunt-react').browserify ]
+				transform: [ [ require('grunt-react').browserify, { harmony: true } ] ]
 			},
 			jsx: {
 				src: ['react/**/*.jsx'],
@@ -31,11 +31,11 @@ module.exports = function(grunt) {
 			}
 		}
 	});
-
 	grunt.loadNpmTasks('grunt-browserify');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-nodemon');
+
 
 	grunt.registerTask('default', [
 		'browserify',

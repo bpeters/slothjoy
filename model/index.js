@@ -8,45 +8,22 @@ Parse.initialize(parseApp, parseJavascript);
 
 var Rotation = Parse.Object.extend("rotation");
 var Chore = Parse.Object.extend("chore");
-var Rotation2Chore = Parse.Object.extend("rotation2chore");
 
-prepareRotation = function (results) {
-		var json = _.chain(results)
-			.groupBy(function(n) {
-				return n.rotationId;
-			})
-			.pairs()
-			.map(function(currentItem) {
-					return _.zipObject(['rotationId','chores'], currentItem);
-			})
-			.value();
-		return json;
-}
-
-exports.chores = function (callback) {
-	var query = new Parse.Query(Chore);
-	query.find({
-		success: function(results) {
-			var chores = _.map(results, function(chore, i) {
-				return({
-					choreId: chore.get('chore_id'),
-					chore: chore.get('chore'),
-					points: chore.get('points')
-				});
-			});
-			if (chores) {
-				console.log("Successfully retrieved " + chores.length + " chores.");
-				return callback(null, chores);
-			} else {
-				console.log("Not Found");
-				return callback('Not Found', null);
-			}
-		},
-		error: function(error) {
-			console.log("Error: " + error.code + " " + error.message);
-			return callback(error, null);
-		}
-	});
+prepareChores = function (chores) {
+	var json = _.chain(chores)
+		.groupBy(function(n) {
+			return n.rotationId;
+		})
+		.pairs()
+		.map(function(currentItem) {
+			return _.zipObject(['rotationId','chores'], currentItem);
+		})
+		.value();
+	for (var i = 0; i < json.length; i++) {
+		var obj = _.find(chores, { 'rotationId': json[i].rotationId });
+		json[i].rotation = obj.rotation;
+	}
+	return json;
 };
 
 exports.rotations = function (callback) {
@@ -74,23 +51,23 @@ exports.rotations = function (callback) {
 	});
 };
 
-exports.rotations2chores = function (callback) {
-	var query = new Parse.Query(Rotation2Chore);
+exports.chores = function (callback) {
+	var query = new Parse.Query(Chore);
 	query.find({
 		success: function(results) {
-			var rotations2chores = _.map(results, function(rotation2chore, i) {
+			var chores = _.map(results, function(chore, i) {
 				return({
-					rotationId: rotation2chore.get('rotation_id'),
-					choreId: rotation2chore.get('chore_id'),
-					chore: rotation2chore.get('chore'),
-					rotation: rotation2chore.get('rotation'),
-					points: rotation2chore.get('points')
+					rotationId: chore.get('rotation_id'),
+					rotation: chore.get('rotation'),
+					choreId: chore.get('chore_id'),
+					chore: chore.get('chore'),
+					points: chore.get('points')
 				});
 			});
-			if (rotations2chores) {
-				console.log("Successfully retrieved " + rotations2chores.length + " rotations2chores.");
-				var jsonRotation = prepareRotation(rotations2chores);
-				return callback(null, jsonRotation);
+			if (chores) {
+				console.log("Successfully retrieved " + chores.length + " rotations2chores.");
+				var jsonChores = prepareChores(chores);
+				return callback(null, jsonChores);
 			} else {
 				console.log("Not Found");
 				return callback('Not Found', null);

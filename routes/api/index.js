@@ -8,19 +8,7 @@ function paramsFromReq(req) {
 	return params;
 }
 
-exports.chores = function(req, res) {
-	var params = paramsFromReq(req);
-	model.chores(function(error, results) {
-		console.log(results);
-		if (error) {
-			return next(error);
-		} else {
-			res.json(results);
-		}
-	});
-};
-
-exports.rotations = function(req, res) {
+exports.rotations = function(req, res, next) {
 	var params = paramsFromReq(req);
 	model.rotations(function(error, results) {
 		console.log(results);
@@ -32,11 +20,11 @@ exports.rotations = function(req, res) {
 	});
 };
 
-exports.rotations2chores = function(req, res) {
+exports.chores = function(req, res, next) {
 	var params = paramsFromReq(req);
-	model.rotations2chores(function(error, results) {
+	model.chores(function(error, results) {
 		console.log(results);
-		if(error) {
+		if (error) {
 			return next(error);
 		} else {
 			res.json(results);

@@ -6,29 +6,12 @@ var request = require('superagent');
 module.exports = Reflux.createStore({
 	listenables: RotationActions,
 	init: function() {
-		this._rotations = [
-			{
-				id: '1',
-				name: 'DAILY'
-			},
-			{
-				id: '2',
-				name: 'WEEKLY'
-			},
-			{
-				id: '3',
-				name: 'MONTHLY'
-			},
-			{
-				id: '4',
-				name: 'YEARLY'
-			}
-		];
+		this._chores = [];
 	},
-	getRotations: function() {
+	getChores: function() {
 		var self = this;
 		request
-			.get('/api/1/rotations/')
+			.get('/api/1/chores/')
 			.end(function(error, results){
 				if (error) {
 					self.onLoadError(error);
@@ -37,14 +20,14 @@ module.exports = Reflux.createStore({
 				}
 			});
 	},
-	onLoadSuccess: function(rotations) {
-		this._rotations = rotations;
-		this.trigger(this._rotations);
+	onLoadSuccess: function(chores) {
+		this._chores = chores;
+		this.trigger(this._chores);
 	},
 	onLoadError: function(error) {
-		this.trigger(this._rotations);
+		this.trigger(this._chores);
 	},
 	getDefaultData: function() {
-		return this._rotations;
+		return this._chores;
 	}
 });
